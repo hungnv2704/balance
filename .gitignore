@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Runtime storage & logs
+backend/storage/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+coverage/
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

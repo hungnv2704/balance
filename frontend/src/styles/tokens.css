@@ -1,0 +1,35 @@
+:root {
+  /* Accent (Actions only) */
+  --color-accent: #4338CA;
+  --color-accent-hover: #3730A3;
+  --color-accent-subtle: #EEF2FF;
+
+  /* Neutrals */
+  --bg-canvas: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --bg-subtle: #F1F5F9;
+  --border-hairline: #E2E8F0;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+
+  /* Semantic (Meaning only — always paired with icon + text) */
+  --color-success: #15803D;
+  --bg-success: #F0FDF4;
+  --border-success: #BBF7D0;
+
+  --color-warning: #B45309;
+  --bg-warning: #FFFBEB;
+  --border-warning: #FDE68A;
+
+  --color-danger: #B91C1C;
+  --bg-danger: #FEF2F2;
+  --border-danger: #FECACA;
+
+  --color-info: #334155;
+  --bg-info: #F1F5F9;
+  --border-info: #CBD5E1;
+
+  /* Floating Layer Shadows Only */
+  --shadow-floating: 0 10px 25px -5px rgb(15 23 42 / 0.08), 0 4px 10px -6px rgb(15 23 42 / 0.04);
+}

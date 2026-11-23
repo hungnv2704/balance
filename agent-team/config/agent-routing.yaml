@@ -1,0 +1,50 @@
+# Framework-neutral role map. Adapt names and invocation syntax to your agent platform.
+version: 1
+project: personal-finance-management
+shared_instructions:
+  - AGENTS.md
+  - agent.md
+orchestrator:
+  prompt: agents/orchestrator.md
+  responsibilities:
+    - intake_and_triage
+    - delegation_and_dependencies
+    - decision_log
+    - integration_review
+    - final_delivery_report
+agents:
+  product_manager:
+    prompt: agents/product-manager.md
+    owns: [product_scope, user_workflows, business_rules, acceptance_criteria, prioritization]
+    consult_when: [new_feature, ambiguous_behavior, reporting_semantics, mvp_planning]
+  software_architect:
+    prompt: agents/software-architect.md
+    owns: [system_design, domain_boundaries, api_contracts, data_model_direction, adr]
+    consult_when: [new_module, schema_change, integration, cross_cutting_change, scalability_decision]
+  backend_engineer:
+    prompt: agents/backend-engineer.md
+    owns: [backend_implementation, api, persistence, domain_services, background_jobs]
+    consult_when: [server_logic, financial_calculation, database_change, import_export, scheduled_write]
+  frontend_engineer:
+    prompt: agents/frontend-engineer.md
+    owns: [frontend_implementation, ux_behavior, accessibility, client_api_integration]
+    consult_when: [screen, form, navigation, dashboard, client_state]
+  qa_engineer:
+    prompt: agents/qa-engineer.md
+    owns: [test_strategy, test_automation, regression_assessment, quality_evidence]
+    consult_when: [bug_fix, feature_delivery, release_candidate, financial_rule_change]
+  security_engineer:
+    prompt: agents/security-engineer.md
+    owns: [threat_model, security_requirements, security_review, mitigation_verification]
+    consult_when: [authentication, authorization, pii, financial_data, import_export, attachment, external_integration, deployment_secret]
+workflows:
+  feature_delivery: workflows/feature-delivery-workflow.md
+  handoff_contract: workflows/handoff-contract.md
+financial_invariants:
+  - income_expense_transfer_are_distinct
+  - internal_transfers_are_not_income_or_expense
+  - exact_money_arithmetic_only
+  - explicit_currency_on_each_amount
+  - server_side_resource_ownership_enforcement
+  - idempotent_financial_writes
+  - auditable_historical_records
