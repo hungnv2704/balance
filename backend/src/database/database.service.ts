@@ -12,11 +12,17 @@ export class DatabaseService implements DatabaseExecutor, OnModuleDestroy {
   private readonly pool: Pool;
 
   constructor(@Inject(APP_CONFIG) config: AppConfig) {
+    const isLocalDb =
+      config.databaseUrl.includes('localhost') || config.databaseUrl.includes('127.0.0.1');
     this.pool = new Pool({
       connectionString: config.databaseUrl,
       max: config.pgPoolMax,
-      connectionTimeoutMillis: 5000,
+      connectionTimeoutMillis: 10000,
       idleTimeoutMillis: 30000,
+      ssl:
+        config.nodeEnv === 'production' && !isLocalDb
+          ? { rejectUnauthorized: false }
+          : undefined,
     });
   }
 

@@ -1,0 +1,36 @@
+databases:
+  - name: balance-db
+    databaseName: pfm_db
+    user: pfm_user
+    plan: free
+    postgresMajorVersion: "16"
+
+services:
+  - type: web
+    name: balance-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3001"
+      - key: AUTO_RUN_MIGRATIONS
+        value: "true"
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAME_SITE
+        value: lax
+      - key: DATABASE_URL
+        fromDatabase:
+          name: balance-db
+          property: connectionString
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: MFA_ENCRYPTION_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false
