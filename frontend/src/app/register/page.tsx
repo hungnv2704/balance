@@ -44,19 +44,6 @@ const STEP_META: Record<RegisterStep, { label: string; title: string; percent: n
   2: { label: 'Bước 2 / 2', title: 'Thiết lập tài chính', percent: 100 },
 };
 
-const TIMEZONE_OPTIONS = [
-  { value: 'Asia/Ho_Chi_Minh', label: 'Asia/Ho_Chi_Minh', sublabel: 'UTC+07:00 · Việt Nam', popular: true },
-  { value: 'Asia/Bangkok', label: 'Asia/Bangkok', sublabel: 'UTC+07:00 · Thái Lan', popular: true },
-  { value: 'Asia/Singapore', label: 'Asia/Singapore', sublabel: 'UTC+08:00 · Singapore', popular: true },
-  { value: 'Asia/Tokyo', label: 'Asia/Tokyo', sublabel: 'UTC+09:00 · Nhật Bản' },
-  { value: 'Asia/Seoul', label: 'Asia/Seoul', sublabel: 'UTC+09:00 · Hàn Quốc' },
-  { value: 'Europe/London', label: 'Europe/London', sublabel: 'UTC+00:00 · Vương quốc Anh' },
-  { value: 'Europe/Paris', label: 'Europe/Paris', sublabel: 'UTC+01:00 · Châu Âu' },
-  { value: 'America/New_York', label: 'America/New_York', sublabel: 'UTC-05:00 · Hoa Kỳ (Đông)' },
-  { value: 'America/Los_Angeles', label: 'America/Los_Angeles', sublabel: 'UTC-08:00 · Hoa Kỳ (Tây)' },
-  { value: 'UTC', label: 'UTC', sublabel: 'UTC+00:00 · Giờ phối hợp quốc tế' },
-];
-
 export default function RegisterPage() {
   return (
     <ReducedMotionConfig>
@@ -92,7 +79,6 @@ function RegisterPageContent() {
 
   // Step 2: Financial preferences
   const [baseCurrencyCode, setBaseCurrencyCode] = useState<CurrencyCode>('VND');
-  const [timezone, setTimezone] = useState('Asia/Ho_Chi_Minh');
 
   const [touched, setTouched] = useState<{
     fullName?: boolean;
@@ -218,12 +204,17 @@ function RegisterPageContent() {
 
     setSubmitting(true);
     try {
+      const detectedTimezone =
+        typeof Intl !== 'undefined'
+          ? Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Ho_Chi_Minh'
+          : 'Asia/Ho_Chi_Minh';
+
       await registerWithCredentials({
         fullName: fullName.trim(),
         email: email.trim(),
         password,
         baseCurrencyCode,
-        timezone,
+        timezone: detectedTimezone,
       });
       router.push('/dashboard');
     } catch (err) {
@@ -721,20 +712,6 @@ function RegisterPageContent() {
                     placeholder="Chọn tiền tệ cơ sở"
                     searchPlaceholder="Tìm mã hoặc tên tiền tệ"
                   />
-
-                  <SearchableCombobox
-                    id="reg-timezone"
-                    label="Múi giờ"
-                    options={TIMEZONE_OPTIONS}
-                    value={timezone}
-                    onChange={setTimezone}
-                    placeholder="Chọn múi giờ"
-                    searchPlaceholder="Tìm múi giờ hoặc thành phố"
-                  />
-
-                  <p className="text-[12px] leading-4 text-[#64748B]">
-                    Hệ thống tự động tạo Sổ mặc định theo tiền tệ đã chọn và bộ danh mục Thu/Chi chuẩn.
-                  </p>
 
                   <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
                     <MotionButton

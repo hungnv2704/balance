@@ -8,7 +8,6 @@ import {
   ArrowDownLeft,
   ArrowLeftRight,
   ArrowUpRight,
-  FileSpreadsheet,
   LayoutDashboard,
   LogIn,
   LogOut,
@@ -40,7 +39,6 @@ const PRIMARY_NAV = [
   { href: '/recurring', label: 'Định kỳ', Icon: Repeat },
   { href: '/budgets', label: 'Ngân sách', Icon: PieChart },
   { href: '/accounts', label: 'Tài khoản', Icon: Wallet },
-  { href: '/imports', label: 'Nhập CSV', Icon: FileSpreadsheet },
 ] as const;
 
 const MOBILE_BAR_NAV = [
@@ -341,7 +339,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             aria-expanded={mobileDrawerOpen}
             className={[
               'flex flex-col items-center justify-center gap-1 min-h-[56px] px-1 py-2 text-[11px] leading-4 cursor-pointer',
-              ['/transfers', '/recurring', '/accounts', '/imports', '/settings', '/login', '/register'].includes(pathname)
+              ['/transfers', '/recurring', '/accounts', '/settings', '/login', '/register'].includes(pathname)
                 ? 'text-[#4338CA] font-semibold'
                 : 'text-[#475569] font-normal',
             ].join(' ')}
@@ -392,7 +390,6 @@ function MobileMoreSheet({
     { href: '/transfers', label: 'Chuyển khoản', Icon: ArrowLeftRight },
     { href: '/recurring', label: 'Định kỳ', Icon: Repeat },
     { href: '/accounts', label: 'Tài khoản', Icon: Wallet },
-    { href: '/imports', label: 'Nhập CSV', Icon: FileSpreadsheet },
     { href: '/settings', label: 'Cài đặt', Icon: Settings },
     ...(!isSignedIn ? [{ href: '/login', label: 'Đăng nhập', Icon: LogIn }] : []),
   ];

@@ -319,15 +319,8 @@ export default function RecurringPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div className="space-y-1 max-w-2xl">
-          <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Định kỳ</h1>
-          <p className="text-[14px] leading-5 text-[#475569]">
-            Tạo lịch định kỳ cho Thu nhập &amp; Chi tiêu. Khi đến hạn, hệ thống tạo{' '}
-            <span className="font-semibold text-[#0F172A]">bản nháp</span> để bạn xác
-            nhận trước khi ghi sổ.
-          </p>
-        </div>
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Định kỳ</h1>
 
         <div className="flex flex-wrap items-center gap-3">
           <MotionButton

@@ -1,35 +1,48 @@
-# Balance — Quản lý Tài chính Cá nhân
+<p align="left">
+  <img src="./frontend/public/balance-logo.png" alt="Balance" height="44" />
+</p>
 
-Ứng dụng quản lý tài chính cá nhân đa ví với kiến trúc **Modular Monolith** (`NestJS + PostgreSQL 16 + Next.js`), tách biệt hoàn toàn **Thu nhập**, **Chi tiêu (& Hoàn tiền)**, và **Chuyển khoản nội bộ**, đảm bảo số học tiền tệ chính xác (`BIGINT` minor units + ISO 4217).
+# Balance — Personal Finance Management
 
-## Cấu trúc dự án
+**Balance** is a personal finance application built to give individuals a clear, accurate, and explainable view of their money across multiple wallets and currencies.
 
-- `frontend/` — Next.js App Router, Tailwind CSS, `@animate-ui/react`, `motion`, `lucide-react`
-- `backend/` — NestJS Modular Monolith (Auth Argon2id + Refresh Token Rotation, MFA TOTP, Accounts, Income, Expense & Refunds, Transfers, Budgets, Reports, Recurring Rules, Bulk CSV Import, Attachments, Data Export/Deletion)
-- `packages/shared-types/` — Shared TypeScript domain contracts
-- `database/migrations/` — PostgreSQL 16+ DDL migrations (`001_initial_schema.sql`, `002_phase2_mfa_and_attachments.sql`)
-- `docs/` — Bộ tài liệu phân tích sản phẩm, kiến trúc, bảo mật, UI/UX và QA (`01` → `09`)
-- `docker-compose.yml` — Khởi chạy PostgreSQL 16 nhanh qua Docker
+## Why Balance?
 
-## Hướng dẫn chạy cục bộ
+Most everyday budgeting apps mix income, expenses, and transfers between a user's own accounts into a single stream—causing inflated spending totals, misleading cash-flow charts, and balances that never match real life.
 
-### 1. Khởi tạo PostgreSQL 16 & Migration
-```bash
-docker compose up -d
-# Hoặc chạy trực tiếp migration lên PostgreSQL 16:
-psql -U pfm_user -d pfm_db -f database/migrations/001_initial_schema.sql
-psql -U pfm_user -d pfm_db -f database/migrations/002_phase2_mfa_and_attachments.sql
-```
+**Balance** was created to solve three core problems:
 
-### 2. Build Shared Types & Chạy Backend (port 3001)
-```bash
-cd packages/shared-types && npm install && npm run build
-cd ../../backend && npm install && npm run build && npm start
-```
+- **True cash-flow clarity:** Income, Expenses (with linked Refunds), and Internal Transfers are treated as distinct financial concepts. Moving money between your own wallets never inflates your earnings or spending.
+- **Multi-wallet & multi-currency accuracy:** Manage cash, bank accounts, e-wallets, and savings across currencies (such as VND, USD, EUR, JPY, and KWD) without silently combining different currencies into a meaningless total.
+- **Calm, everyday control:** Fast transaction logging, monthly category budgets with early threshold alerts, recurring draft reminders, receipt attachments, and two-factor authentication—all designed to stay quiet, readable, and trustworthy.
 
-### 3. Chạy Frontend (port 3000)
-```bash
-cd frontend && pnpm install && pnpm build && pnpm start --port 3000
-```
+---
 
-Mở `http://localhost:3000` (tự động chuyển tới `/login` / `/register`).
+## Core Modules
+
+### 1. Secure Sign-In & Onboarding
+Clean two-step onboarding with base currency setup and automatic system timezone detection, plus optional two-factor authentication (2FA) to keep personal financial records private.
+
+![Balance Login](./docs/assets/login.png)
+
+### 2. Financial Overview & Cash Flow
+Track total posted balances, total income, net expenses (automatically adjusted for refunds), net cash flow, and top monthly budgets—strictly separated by currency.
+
+![Balance Dashboard](./docs/assets/dashboard.png)
+
+### 3. Dedicated Income & Expense Tracking
+Log daily income and expenses in seconds with searchable categories, clear transaction states (posted, pending, draft, voided), linked expense refunds, and receipt attachments.
+
+![Balance Expenses](./docs/assets/expenses.png)
+
+### 4. Monthly Category Budgets
+Set monthly spending limits per category and currency with clear visual progress indicators and early warnings at 80% and 100% usage.
+
+![Balance Budgets](./docs/assets/budgets.png)
+
+---
+
+### Additional Capabilities
+- **Internal Transfers:** Move funds between your own accounts (same-currency or cross-currency with explicit exchange rates) while separating transfer fees into their own expense record.
+- **Recurring Schedules:** Define daily, weekly, monthly, or yearly schedules that generate draft entries for your review before posting.
+- **Data Export & Privacy:** Export your financial records whenever you need them, with full user control over account data.

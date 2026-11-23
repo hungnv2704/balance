@@ -155,13 +155,8 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Page Header + Controls */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div className="space-y-1">
-          <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Tổng quan</h1>
-          <p className="text-[14px] leading-5 text-[#475569]">
-            Báo cáo tách biệt từng tiền tệ — không cộng gộp khác tiền tệ.
-          </p>
-        </div>
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Tổng quan</h1>
 
         <div className="flex flex-wrap items-end gap-3">
           <SegmentedTabs

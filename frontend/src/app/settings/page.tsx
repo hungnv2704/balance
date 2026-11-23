@@ -50,7 +50,6 @@ export default function SettingsPage() {
     authUser,
     activeAccounts,
     setBaseCurrency,
-    setTimezone,
     pushToast,
     resetDemoData,
   } = usePreviewStore();
@@ -110,63 +109,36 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Cài đặt</h1>
-        <p className="text-[14px] leading-5 text-[#475569]">
-          Quản lý tiền tệ cơ sở, múi giờ địa phương, xuất dữ liệu và bảo mật tài khoản.
-        </p>
-      </div>
+      <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Cài đặt</h1>
 
       {/* Preferences */}
       <section className="rounded-xl border border-[#E2E8F0] bg-white p-5 space-y-4">
         <div className="flex items-center gap-2 border-b border-[#E2E8F0] pb-3">
           <Globe className="h-4 w-4 text-[#4338CA]" aria-hidden={true} />
-          <h2 className="text-[16px] font-semibold text-[#0F172A]">Tùy chọn Hiển thị & Múi giờ</h2>
+          <h2 className="text-[16px] font-semibold text-[#0F172A]">Tùy chọn hiển thị</h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="base-currency" className="text-[12px] font-semibold text-[#475569]">
-              Tiền tệ cơ sở
-            </label>
-            <select
-              id="base-currency"
-              value={state.baseCurrency}
-              onChange={(e) => setBaseCurrency(e.target.value as CurrencyCode)}
-              className="min-h-[44px] rounded-lg border border-[#E2E8F0] bg-white px-3 text-[14px] text-[#0F172A] focus:border-[#4338CA] focus:outline-none"
-            >
-              {CURRENCY_LIST.map((c) => (
-                <option key={c.code} value={c.code}>
-                  {c.code} — {c.name}
-                </option>
-              ))}
-            </select>
-            <p className="text-[12px] text-[#64748B]">
-              {activeAccounts.length === 1
-                ? 'Nếu Sổ chung chưa có giao dịch, đổi tiền tệ cơ sở sẽ tự cập nhật tiền tệ Sổ chung.'
-                : 'Ưu tiên hiển thị trên báo cáo (không tự động cộng gộp khác tiền tệ).'}
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-1.5">
-            <label htmlFor="user-timezone" className="text-[12px] font-semibold text-[#475569]">
-              Múi giờ địa phương
-            </label>
-            <select
-              id="user-timezone"
-              value={state.timezone}
-              onChange={(e) => setTimezone(e.target.value)}
-              className="min-h-[44px] rounded-lg border border-[#E2E8F0] bg-white px-3 text-[14px] text-[#0F172A] focus:border-[#4338CA] focus:outline-none"
-            >
-              <option value="Asia/Ho_Chi_Minh">Asia/Ho_Chi_Minh (UTC+7)</option>
-              <option value="Asia/Bangkok">Asia/Bangkok (UTC+7)</option>
-              <option value="Asia/Tokyo">Asia/Tokyo (UTC+9)</option>
-              <option value="UTC">UTC</option>
-            </select>
-            <p className="text-[12px] text-[#64748B]">
-              Dùng để xác định ranh giới tháng của Ngân sách theo ngày giao dịch.
-            </p>
-          </div>
+        <div className="max-w-md flex flex-col gap-1.5">
+          <label htmlFor="base-currency" className="text-[12px] font-semibold text-[#475569]">
+            Tiền tệ cơ sở
+          </label>
+          <select
+            id="base-currency"
+            value={state.baseCurrency}
+            onChange={(e) => setBaseCurrency(e.target.value as CurrencyCode)}
+            className="min-h-[44px] rounded-lg border border-[#E2E8F0] bg-white px-3 text-[14px] text-[#0F172A] focus:border-[#4338CA] focus:outline-none"
+          >
+            {CURRENCY_LIST.map((c) => (
+              <option key={c.code} value={c.code}>
+                {c.code} — {c.name}
+              </option>
+            ))}
+          </select>
+          <p className="text-[12px] text-[#64748B]">
+            {activeAccounts.length === 1
+              ? 'Nếu Sổ chung chưa có giao dịch, đổi tiền tệ cơ sở sẽ tự cập nhật tiền tệ Sổ chung.'
+              : 'Ưu tiên hiển thị trên báo cáo (không tự động cộng gộp khác tiền tệ).'}
+          </p>
         </div>
       </section>
 
@@ -174,7 +146,7 @@ export default function SettingsPage() {
       <section className="rounded-xl border border-[#E2E8F0] bg-white p-5 space-y-4">
         <div className="space-y-1">
           <h2 className="text-[16px] font-semibold text-[#0F172A]">
-            Xuất dữ liệu cá nhân (JSON / CSV)
+            Xuất dữ liệu cá nhân (JSON)
           </h2>
           <p className="text-[13px] text-[#475569]">
             Thao tác chạy nền hiển thị tiến độ theo từng bước và thời gian ước lượng còn lại.

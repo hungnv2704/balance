@@ -164,12 +164,7 @@ export default function IncomesPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="space-y-1">
-        <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Thu nhập</h1>
-        <p className="text-[14px] leading-5 text-[#475569]">
-          Ghi nhận dòng tiền đi vào tách biệt hoàn toàn khỏi Chi tiêu &amp; Hoàn tiền.
-        </p>
-      </div>
+      <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Thu nhập</h1>
 
       {/* Quick-Log Form Card (1px border, flat) */}
       <section className="rounded-xl border border-[#E2E8F0] bg-white p-5 space-y-5">

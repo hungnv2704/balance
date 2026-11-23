@@ -176,12 +176,7 @@ export default function ExpensesPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="space-y-1">
-        <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Chi tiêu</h1>
-        <p className="text-[14px] leading-5 text-[#475569]">
-          Ghi nhận chi tiêu chính xác theo từng đơn vị tiền tệ &amp; ghi nhận hoàn tiền.
-        </p>
-      </div>
+      <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Chi tiêu</h1>
 
       {/* Quick-Log Expense Card */}
       <section className="rounded-xl border border-[#E2E8F0] bg-white p-5 space-y-5">

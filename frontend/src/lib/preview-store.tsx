@@ -207,10 +207,18 @@ function advanceRecurringDate(
   return `${String(nextYear).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(clampedDay).padStart(2, '0')}`;
 }
 
+function getSystemTimezone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Ho_Chi_Minh';
+  } catch {
+    return 'Asia/Ho_Chi_Minh';
+  }
+}
+
 function createEmptyLiveState(user?: ApiUserProfile | null): PreviewDataState {
   return {
     baseCurrency: user ? normalizeCurrency(user.baseCurrencyCode) : 'VND',
-    timezone: user?.timezone ?? 'Asia/Ho_Chi_Minh',
+    timezone: user?.timezone ?? getSystemTimezone(),
     accounts: [],
     categories: [],
     incomeSources: [],
@@ -225,7 +233,7 @@ function createEmptyLiveState(user?: ApiUserProfile | null): PreviewDataState {
 function createInitialSeed(): PreviewDataState {
   return {
     baseCurrency: 'VND',
-    timezone: 'Asia/Ho_Chi_Minh',
+    timezone: getSystemTimezone(),
     accounts: [
       {
         id: 'acc-default',
@@ -737,20 +745,7 @@ export interface PreviewContextValue {
   pauseRecurringRule: (ruleId: string) => void;
   resumeRecurringRule: (ruleId: string) => void;
   runDueRecurringRules: (idempotencyKey?: string) => Promise<{ ok: boolean; createdCount: number }>;
-  commitBulkImportDemo: (input: {
-    accountId: string;
-    rows: Array<{
-      entryType: 'INCOME' | 'EXPENSE';
-      transactionDate: string;
-      amountMinor: number;
-      categoryId?: string | null;
-      description: string;
-      note?: string | null;
-    }>;
-    idempotencyKey?: string;
-  }) => { ok: boolean; importedCount: number; error?: string };
   setBaseCurrency: (currency: CurrencyCode) => void;
-  setTimezone: (tz: string) => void;
   resetDemoData: () => void;
 }
 
@@ -945,7 +940,7 @@ export function PreviewStoreProvider({ children }: { children: React.ReactNode }
         const profile = profileOverride ?? authUser;
         setLiveState({
           baseCurrency: profile ? normalizeCurrency(profile.baseCurrencyCode) : 'VND',
-          timezone: profile?.timezone ?? 'Asia/Ho_Chi_Minh',
+          timezone: profile?.timezone ?? getSystemTimezone(),
           accounts: accountsDto.map(mapApiAccount),
           categories: categoriesDto.map(mapApiCategory),
           incomeSources: sourcesDto.map(mapApiSource),
@@ -2571,22 +2566,6 @@ export function PreviewStoreProvider({ children }: { children: React.ReactNode }
     [dataMode, executeLiveAction, pushToast, updateDemoState],
   );
 
-  const setTimezone = useCallback(
-    (tz: string) => {
-      if (dataMode === 'live') {
-        executeLiveAction({
-          actionTitle: 'Cập nhật múi giờ',
-          applyOptimistic: (prev) => ({ ...prev, timezone: tz }),
-          apiCall: () => authApi.updatePreferences({ timezone: tz }),
-        });
-      } else {
-        updateDemoState((prev) => ({ ...prev, timezone: tz }));
-      }
-      pushToast({ tone: 'success', title: `Đã cập nhật múi giờ: ${tz}` });
-    },
-    [dataMode, executeLiveAction, pushToast, updateDemoState],
-  );
-
   const resetDemoData = useCallback(() => {
     const seed = createInitialSeed();
     persistDemo(seed);
@@ -2598,73 +2577,6 @@ export function PreviewStoreProvider({ children }: { children: React.ReactNode }
       title: 'Đã đặt lại dữ liệu về trạng thái mặc định',
     });
   }, [persistDemo, pushToast]);
-
-  const commitBulkImportDemo = useCallback(
-    (input: {
-      accountId: string;
-      rows: Array<{
-        entryType: 'INCOME' | 'EXPENSE';
-        transactionDate: string;
-        amountMinor: number;
-        categoryId?: string | null;
-        description: string;
-        note?: string | null;
-      }>;
-      idempotencyKey?: string;
-    }): { ok: boolean; importedCount: number; error?: string } => {
-      if (input.idempotencyKey && usedIdempotencyKeysRef.current.has(input.idempotencyKey)) {
-        pushToast({
-          tone: 'info',
-          title: 'Yêu cầu nhập CSV đã được xử lý trước đó',
-          description: 'Không ghi trùng các giao dịch vừa nhập.',
-        });
-        return { ok: true, importedCount: input.rows.length };
-      }
-
-      const account = demoState.accounts.find(
-        (a) => a.id === input.accountId && a.archivedAt === null,
-      );
-      if (!account) {
-        return { ok: false, importedCount: 0, error: 'Tài khoản đích không tồn tại hoặc đã lưu trữ.' };
-      }
-      if (input.rows.length === 0) {
-        return { ok: false, importedCount: 0, error: 'Không có dòng hợp lệ nào được chọn để nhập.' };
-      }
-
-      const nowIso = new Date().toISOString();
-      const newTxs: Transaction[] = input.rows.map((row, idx) => ({
-        id: `tx-csv-${Date.now()}-${idx}-${Math.random().toString(16).slice(2, 6)}`,
-        accountId: account.id,
-        entryType: row.entryType,
-        status: 'POSTED',
-        amountMinor: row.amountMinor,
-        currencyCode: account.currencyCode,
-        transactionDate: row.transactionDate,
-        description: row.description.trim() || 'Giao dịch nhập CSV',
-        note: row.note?.trim() || undefined,
-        categoryId: row.categoryId ?? undefined,
-        createdAt: nowIso,
-      }));
-
-      if (input.idempotencyKey) {
-        usedIdempotencyKeysRef.current.add(input.idempotencyKey);
-      }
-
-      updateDemoState((prev) => ({
-        ...prev,
-        transactions: [...newTxs, ...prev.transactions],
-      }));
-
-      pushToast({
-        tone: 'success',
-        title: `Đã nhập ${newTxs.length} giao dịch từ CSV`,
-        description: `Đã ghi sổ vào tài khoản ${account.name} (${account.currencyCode}).`,
-      });
-
-      return { ok: true, importedCount: newTxs.length };
-    },
-    [demoState.accounts, pushToast, updateDemoState],
-  );
 
   const value: PreviewContextValue = {
     state,
@@ -2711,9 +2623,7 @@ export function PreviewStoreProvider({ children }: { children: React.ReactNode }
     pauseRecurringRule,
     resumeRecurringRule,
     runDueRecurringRules,
-    commitBulkImportDemo,
     setBaseCurrency,
-    setTimezone,
     resetDemoData,
   };
 

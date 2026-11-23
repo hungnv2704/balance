@@ -69,13 +69,8 @@ export default function AccountsPage() {
       <Suspense fallback={null}>
         <AccountsNewQueryTrigger onOpenCreate={() => setCreateOpen(true)} />
       </Suspense>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div className="space-y-1">
-          <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Tài khoản</h1>
-          <p className="text-[14px] leading-5 text-[#475569]">
-            Mỗi tài khoản gắn cố định 1 loại tiền tệ. Quản lý nhiều ví và thực hiện chuyển khoản nội bộ.
-          </p>
-        </div>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Tài khoản</h1>
 
         <MotionButton variant="primary" onClick={() => setCreateOpen(true)}>
           <Plus className="h-4 w-4" aria-hidden={true} />

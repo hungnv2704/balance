@@ -240,59 +240,6 @@ export interface ApiRecurringRunDueResponse {
   transactions?: ApiTransactionRecord[];
 }
 
-export type ImportRowStatus = 'VALID' | 'DUPLICATE_SUSPECTED' | 'INVALID';
-
-export interface ApiImportPreviewRow {
-  rowIndex: number;
-  status: ImportRowStatus;
-  entryType?: 'INCOME' | 'EXPENSE' | null;
-  transactionDate?: string | null;
-  amountMinor?: string | null;
-  currencyCode?: ApiCurrencyCode | null;
-  categoryId?: string | null;
-  categoryName?: string | null;
-  description?: string | null;
-  note?: string | null;
-  duplicateReason?: string | null;
-  matchedTransactionId?: string | null;
-  errors?: string[];
-  error?: string | null;
-}
-
-export interface ApiImportPreviewResponse {
-  accountId: string;
-  currencyCode?: ApiCurrencyCode;
-  totalRows?: number;
-  validCount?: number;
-  duplicateCount?: number;
-  invalidCount?: number;
-  summary?: {
-    totalRows?: number;
-    validCount?: number;
-    duplicateCount?: number;
-    invalidCount?: number;
-  };
-  rows: ApiImportPreviewRow[];
-}
-
-export interface ApiImportCommitRow {
-  rowIndex?: number;
-  entryType: 'INCOME' | 'EXPENSE';
-  transactionDate: string;
-  amountMinor: string;
-  categoryId?: string | null;
-  description?: string | null;
-  note?: string | null;
-}
-
-export interface ApiImportCommitResponse {
-  accountId?: string;
-  importedCount?: number;
-  createdCount?: number;
-  skippedCount?: number;
-  transactions?: ApiTransactionRecord[];
-}
-
 export interface ApiCursorPaginatedResponse<T> {
   items: T[];
   nextCursor: string | null;
@@ -1022,33 +969,6 @@ export const recurringApi = {
     return apiRequest<ApiRecurringRunDueResponse>('/api/v1/recurring-rules/run-due', {
       method: 'POST',
       body: {},
-      idempotencyKey,
-      idempotent: true,
-    });
-  },
-};
-
-export const importsApi = {
-  preview(payload: {
-    accountId?: string;
-    csvContent: string;
-  }): Promise<ApiImportPreviewResponse> {
-    return apiRequest<ApiImportPreviewResponse>('/api/v1/imports/preview', {
-      method: 'POST',
-      body: payload,
-    });
-  },
-
-  commit(
-    payload: {
-      accountId?: string;
-      rows: ApiImportCommitRow[];
-    },
-    idempotencyKey?: string,
-  ): Promise<ApiImportCommitResponse> {
-    return apiRequest<ApiImportCommitResponse>('/api/v1/imports/commit', {
-      method: 'POST',
-      body: payload,
       idempotencyKey,
       idempotent: true,
     });

@@ -246,12 +246,7 @@ export default function TransfersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Chuyển khoản</h1>
-        <p className="text-[14px] leading-5 text-[#475569]">
-          Luân chuyển tiền giữa các tài khoản — không tính vào Thu nhập, Chi tiêu hay Dòng tiền ròng.
-        </p>
-      </div>
+      <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Chuyển khoản</h1>
 
       {/* Empty State when fewer than 2 accounts exist */}
       {activeAccounts.length < 2 ? (

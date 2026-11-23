@@ -109,13 +109,8 @@ export default function BudgetsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-        <div className="space-y-1">
-          <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Ngân sách</h1>
-          <p className="text-[14px] leading-5 text-[#475569]">
-            Giới hạn chi tiêu tháng theo danh mục &amp; tiền tệ. Cảnh báo ở ngưỡng 80% và 100%.
-          </p>
-        </div>
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <h1 className="text-[24px] font-semibold leading-8 text-[#0F172A]">Ngân sách</h1>
 
         <div className="flex flex-wrap items-center gap-3">
           <select

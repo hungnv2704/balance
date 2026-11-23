@@ -80,13 +80,11 @@ export function DateInput({ label, isoValue, onChangeISO, id }: DateInputProps) 
           error ? 'border-[#B91C1C]' : 'border-[#E2E8F0] focus:border-[#4338CA]',
         ].join(' ')}
       />
-      {error ? (
+      {error && (
         <p className="flex items-start gap-1.5 text-[12px] leading-4 text-[#B91C1C]" role="alert">
           <AlertCircle className="h-3.5 w-3.5 shrink-0 mt-0.5" aria-hidden={true} />
           <span>{error}</span>
         </p>
-      ) : (
-        <p className="text-[12px] leading-4 text-[#64748B]">Định dạng: DD/MM/YYYY (theo múi giờ địa phương)</p>
       )}
     </div>
   );

@@ -59,11 +59,6 @@ export function MoneyInput({
     (touched && value.trim() === '' ? 'Vui lòng nhập số tiền.' : null) ||
     (touched && parsed && !parsed.valid ? parsed.error : null);
 
-  const defaultHelper =
-    meta.minorUnit === 0
-      ? `Định dạng ${currency}: Chỉ nhập số nguyên (VD: 250000). Không dùng số thập phân.`
-      : `Định dạng ${currency}: Tối đa ${meta.minorUnit} chữ số thập phân (VD: 125.50).`;
-
   return (
     <div className="flex flex-col gap-1.5">
       <label
@@ -86,7 +81,7 @@ export function MoneyInput({
             setIsFocused(false);
             setTouched(true);
           }}
-          placeholder={meta.minorUnit === 0 ? 'Ví dụ: 150000' : 'Ví dụ: 125.50'}
+          placeholder={meta.minorUnit === 0 ? '150000' : '125.50'}
           aria-invalid={Boolean(inlineError)}
           className={[
             'min-h-[44px] w-full rounded-lg border bg-white pl-3 pr-16 py-2 text-[14px] leading-5 tabular-nums text-[#0F172A] placeholder:text-[#64748B]',
@@ -111,11 +106,11 @@ export function MoneyInput({
         <p className="text-[12px] leading-4 text-[#475569] tabular-nums">
           Giá trị ghi sổ: <span className="font-semibold text-[#0F172A]">{formatMoney(parsed.minorValue, currency)}</span>
         </p>
-      ) : (
+      ) : helperText ? (
         <p className="text-[12px] leading-4 text-[#64748B]">
-          {helperText ?? defaultHelper}
+          {helperText}
         </p>
-      )}
+      ) : null}
     </div>
   );
 }
